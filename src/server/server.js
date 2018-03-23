@@ -16,7 +16,7 @@ MongoClient.connect(dbConfig.url, (err, dbClient) =>
     if(err){
         return console.log(err);
     }
-    var db = dbClient.db("secret-db");
+    let db = dbClient.db("secret-db");
     require('./routes')(app, db);
     app.listen(port, () => {
         console.log('Server is running on ' + port);
