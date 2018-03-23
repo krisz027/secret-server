@@ -7,6 +7,7 @@ module.exports = function(app, db) {
         if(secretValidation.isValidCreationModel(req.body)) {
             secretDao.insertSecret(db, secretModelBuilder.buildSecretModel(req.body))
                 .then((result) => {
+                    delete result.ops[0]._id;
                     res.status(200);
                     res.send(result.ops[0]);
                 })
