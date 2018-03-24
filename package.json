@@ -25,11 +25,13 @@
     "node-sass": "^4.7.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "read-config": "^2.0.0",
     "sass-loader": "^6.0.7",
     "style-loader": "^0.20.3",
     "uniqid": "^4.1.1",
     "webpack": "^4.1.1",
-    "webpack-cli": "^2.0.12"
+    "webpack-cli": "^2.0.12",
+    "xml": "^1.0.1"
   },
   "devDependencies": {
     "nodemon": "^1.17.2"

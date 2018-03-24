@@ -1,22 +1,21 @@
 module.exports = function(app, db) {
-    let secretDao = require('./../dao/SecretDao');
-    let secretValidation = require('./../utils/SecretValidation');
-    let secretModelBuilder = require('./../utils/SecretModelBuilder');
+    let secretDao =             require('./../dao/SecretDao');
+    let secretValidation =      require('./../utils/SecretValidation');
+    let secretModelBuilder =    require('./../utils/SecretModelBuilder');
+    let responseHandler =       require('./../utils/ResponseHandler');
 
     app.post('/secret', (req, res) => {
         if(secretValidation.isValidCreationModel(req.body)) {
             secretDao.insertSecret(db, secretModelBuilder.buildSecretModel(req.body))
                 .then((result) => {
                     delete result.ops[0]._id;
-                    res.status(200);
-                    res.send(result.ops[0]);
+                    responseHandler.sendResponse(res, 200, result.ops[0], null);
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         } else {
-            res.status(405);
-            res.send("Invalid input");
+            responseHandler.sendResponse(res, 405, null, "Invalid input");
         }
     });
 
@@ -37,11 +36,9 @@ module.exports = function(app, db) {
                         .catch((err) => {
                             console.log(err);
                         });
-                    res.status(200);
-                    res.send(result);
+                    responseHandler.sendResponse(res, 200, result, null);
                 } else {
-                    res.status(404);
-                    res.send("Secret not found");
+                    responseHandler.sendResponse(res, 404, null, "Secret not found");
                 }
             })
             .catch((err) => {

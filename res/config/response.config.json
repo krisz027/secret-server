@@ -1,0 +1,14 @@
+{
+    "responseType": [
+        {
+            "key": "json",
+            "contentType": "application/json",
+            "active": true
+        },
+        {
+            "key": "xml",
+            "contentType": "application/xml",
+            "active": false
+        }
+    ]
+}
