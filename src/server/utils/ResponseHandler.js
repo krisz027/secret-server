@@ -1,13 +1,15 @@
 exports.sendResponse = (res, statusCode, secretData, message) => {
+    let encrypter = require('./Encripter');
     if(statusCode === 200){
         let activeResponseType = getResponseType();
+        let decryptedSecret = Object.assign({}, secretData, {secretText: encrypter.decryptString(secretData.secretText)});
 
         if(activeResponseType.key === "xml" ){
-            secretData = buildXmlResponse(secretData);
+            decryptedSecret = buildXmlResponse(decryptedSecret);
         }
         res.header('Content-Type', activeResponseType.contentType);
         res.status(statusCode);
-        res.send(secretData);
+        res.send(decryptedSecret);
     } else {
         res.status(statusCode);
         res.send(message);
