@@ -49,7 +49,7 @@ class App extends Component {
     searchByHash() {
         searchSecretByHash(this.state.searchHash)
             .then((response) => {
-                console.log(response);
+                console.log(response.data);
             })
             .catch((err) => {
                 console.log(err);
