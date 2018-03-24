@@ -1,10 +1,7 @@
 exports.isValidSecretSearch = (secret) => {
-    let now = new Date();
-    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-
     return (secret &&
         secret.remainingViews > 0 &&
-        new Date(secret.expiresAt).getTime() > now
+        new Date(secret.expiresAt).getTime() > new Date().getTime()
     );
 };
 
