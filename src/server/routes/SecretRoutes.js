@@ -1,25 +1,21 @@
 module.exports = function(app, db) {
-    let secretDao = require('./../dao/SecretDao');
-    let secretValidation = require('./../utils/SecretValidation');
-    let secretModelBuilder = require('./../utils/SecretModelBuilder');
-
+    let secretDao =             require('./../dao/SecretDao');
+    let secretValidation =      require('./../utils/SecretValidation');
+    let secretModelBuilder =    require('./../utils/SecretModelBuilder');
+    let responseHandler =       require('./../utils/ResponseHandler');
 
     app.post('/secret', (req, res) => {
         if(secretValidation.isValidCreationModel(req.body)) {
             secretDao.insertSecret(db, secretModelBuilder.buildSecretModel(req.body))
                 .then((result) => {
                     delete result.ops[0]._id;
-                    sendResponse(res, 200, result.ops[0]);
-                 /*   res.status(200);
-                    res.send(result.ops[0]);*/
+                    responseHandler.sendResponse(res, 200, result.ops[0], null);
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         } else {
-            sendResponse(res, 405, {message: "Invalid input"});
-         /*   res.status(405);
-            res.send({message: "Invalid input"});*/
+            responseHandler.sendResponse(res, 405, null, "Invalid input");
         }
     });
 
@@ -40,13 +36,9 @@ module.exports = function(app, db) {
                         .catch((err) => {
                             console.log(err);
                         });
-                    sendResponse(res, 200, result);
-             /*       res.status(200);
-                    res.send(result);*/
+                    responseHandler.sendResponse(res, 200, result, null);
                 } else {
-                    sendResponse(res, 404, {message: "Secret not found"});
-                 /*   res.status(404);
-                    res.send({message: "Secret not found"});*/
+                    responseHandler.sendResponse(res, 404, null, "Secret not found");
                 }
             })
             .catch((err) => {
@@ -54,23 +46,3 @@ module.exports = function(app, db) {
             });
     });
 };
-
-function sendResponse(res, statusCode, data) {
-    let xml = require('xml');
-    let activeResponseType = getResponseType();
-
-    if(activeResponseType.key === "xml" ){
-        console.log("XML SHIT");
-        data = xml(data);
-        console.log(data);
-    }
-
-    res.header('Content-Type', activeResponseType.contentType);
-    res.status(statusCode);
-    res.send(data);
-}
-
-function getResponseType() {
-    let responseConfig = require('./../../../res/config/response.config');
-    return responseConfig.responseType.filter(item => item.active );
-}
