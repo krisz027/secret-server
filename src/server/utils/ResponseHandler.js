@@ -15,9 +15,13 @@ exports.sendResponse = (res, statusCode, secretData, message) => {
 };
 
 function getResponseType() {
-    let configReader = require('read-config');
-    let responseConfig = configReader(__dirname + '/../../../res/config/response.config.json');
-    return responseConfig.responseType.filter(item => item.active )[0];
+    if(process.env.RESP_TYPE){
+        return {key: process.env.RESP_TYPE, contentType: process.env.RESP_CONTENT_TYPE};
+    } else {
+        let configReader = require('read-config');
+        let responseConfig = configReader(__dirname + '/../../../res/config/response.config.json');
+        return responseConfig.responseType.filter(item => item.active )[0];
+    }
 };
 
 function buildXmlResponse(data) {
